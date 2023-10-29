@@ -1,0 +1,12 @@
+include %L
+
+<Multi_key> <a> <space> : "à"
+<Multi_key> <e> <space> : "è"
+<Multi_key> <i> <space> : "ì"
+<Multi_key> <o> <space> : "ò"
+<Multi_key> <u> <space> : "ù"
+<Multi_key> <a> <a> : "À"
+<Multi_key> <e> <e> : "È"
+<Multi_key> <i> <i> : "Ì"
+<Multi_key> <o> <o> : "Ò"
+<Multi_key> <u> <u> : "Ù"
