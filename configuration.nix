@@ -135,7 +135,7 @@
   users.users.shamorn = {
     isNormalUser = true;
     description = "Daniele Cosio";
-    extraGroups = [ "networkmanager" "wheel" "audio" "storage" ];
+    extraGroups = [ "networkmanager" "wheel" "audio" "storage" "podman" ];
     packages = with pkgs; [
 
     ];
@@ -157,7 +157,7 @@
     wget
     qtile
     home-manager
-    docker-compose
+    arion
     # QTile deps
     xbindkeys
     dmenu
@@ -170,10 +170,11 @@
   programs.dconf.enable = true;
 
   # Enable Docker in rootless mode
-  virtualisation.docker.enable = true;
-  virtualisation.docker.rootless = {
+  virtualisation.docker.enable = false;
+  virtualisation.podman = {
     enable = true;
-    setSocketVariable = true;
+    dockerSocket.enable = true;
+    defaultNetwork.settings.dns_enable = true;
   };
 
   # Enable unfree nvidia drivers

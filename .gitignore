@@ -2,4 +2,4 @@ result/
 .vscode/
 __pycache__
 secrets/
-./configuration-bk.nix
+configuration-bk.nix
