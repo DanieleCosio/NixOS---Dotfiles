@@ -57,6 +57,7 @@ with {
     discord
     nixpkgs-fmt
     rnnoise-plugin
+    rustdesk
     #SpaceFM
     spaceFM
     lxsession
