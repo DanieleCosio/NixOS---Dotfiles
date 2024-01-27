@@ -86,8 +86,19 @@
     enable = true;
     layout = "us";
     xkbVariant = "";
+    exportConfiguration = true;
     windowManager.qtile.enable = true;
     displayManager.lightdm.enable = true;
+
+    libinput = {
+      enable = true;
+      touchpad.tapping = true;
+      touchpad.naturalScrolling = true;
+      touchpad.scrollMethod = "twofinger";
+      touchpad.disableWhileTyping = false;
+      touchpad.clickMethod = "clickfinger";
+      touchpad.accelSpeed = "0";
+    };
   };
 
   # sudo config
