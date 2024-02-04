@@ -44,6 +44,7 @@ with {
     firefox
     zip
     unzip
+    gnome.file-roller
     pavucontrol
     git
     git-lfs
@@ -115,6 +116,12 @@ with {
       '';
     };
   };
+
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
+  };
+
 
   # Set shell
   programs.fish = {
