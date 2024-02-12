@@ -59,6 +59,7 @@ with {
     nixpkgs-fmt
     rnnoise-plugin
     rustdesk
+    go
     #SpaceFM
     spaceFM
     lxsession
