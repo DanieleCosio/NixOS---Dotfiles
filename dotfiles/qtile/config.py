@@ -134,7 +134,7 @@ keys = [
     Key(
         [mod, "control"],
         "c",
-        lazy.spawn("code projects/qtile-config/.config/qtile"),
+        lazy.spawn("code ~/.config/home-manager"),
         desc="Open QTile configuration",
     ),
     # Utility actions
