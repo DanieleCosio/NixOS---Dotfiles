@@ -16,127 +16,139 @@
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+  };
 
-  networking.hostName = "shamornpc"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking = {
+    hostName = "shamornpc";
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
+    # Enable networking
+    networkmanager.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Rome";
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
 
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "it_IT.UTF-8";
-    LC_IDENTIFICATION = "it_IT.UTF-8";
-    LC_MEASUREMENT = "it_IT.UTF-8";
-    LC_MONETARY = "it_IT.UTF-8";
-    LC_NAME = "it_IT.UTF-8";
-    LC_NUMERIC = "it_IT.UTF-8";
-    LC_PAPER = "it_IT.UTF-8";
-    LC_TELEPHONE = "it_IT.UTF-8";
-    LC_TIME = "it_IT.UTF-8";
+    # Select internationalisation properties.
+    extraLocaleSettings = {
+      LC_ADDRESS = "it_IT.UTF-8";
+      LC_IDENTIFICATION = "it_IT.UTF-8";
+      LC_MEASUREMENT = "it_IT.UTF-8";
+      LC_MONETARY = "it_IT.UTF-8";
+      LC_NAME = "it_IT.UTF-8";
+      LC_NUMERIC = "it_IT.UTF-8";
+      LC_PAPER = "it_IT.UTF-8";
+      LC_TELEPHONE = "it_IT.UTF-8";
+      LC_TIME = "it_IT.UTF-8";
+    };
   };
 
   # Enable flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Enable polkit
-  security.polkit.enable = true;
-  # Set right polkit rules for PCManFM volumes automounter
-  security.polkit.extraConfig = ''
-    polkit.addRule(function(action, subject) {
-      var YES = polkit.Result.YES;
-      var permission = {
-          // required for udisks1:
-          "org.freedesktop.udisks.filesystem-mount": YES,
-          "org.freedesktop.udisks.luks-unlock": YES,
-          "org.freedesktop.udisks.drive-eject": YES,
-          "org.freedesktop.udisks.drive-detach": YES,
-          // required for udisks2:
-          "org.freedesktop.udisks2.filesystem-mount": YES,
-          "org.freedesktop.udisks2.encrypted-unlock": YES,
-          "org.freedesktop.udisks2.eject-media": YES,
-          "org.freedesktop.udisks2.power-off-drive": YES,
-          // required for udisks2 if using udiskie from another seat (e.g. systemd):
-          "org.freedesktop.udisks2.filesystem-mount-other-seat": YES,
-          "org.freedesktop.udisks2.filesystem-unmount-others": YES,
-          "org.freedesktop.udisks2.encrypted-unlock-other-seat": YES,
-          "org.freedesktop.udisks2.encrypted-unlock-system": YES,
-          "org.freedesktop.udisks2.eject-media-other-seat": YES,
-          "org.freedesktop.udisks2.power-off-drive-other-seat": YES,
-      };
-      if (subject.isInGroup("storage")) {
-          return permission[action.id];
-      }
-    })
-  '';
+  security = {
+    # Enable polkit
+    polkit.enable = true;
+    polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        var YES = polkit.Result.YES;
+        var permission = {
+            // required for udisks1:
+            "org.freedesktop.udisks.filesystem-mount": YES,
+            "org.freedesktop.udisks.luks-unlock": YES,
+            "org.freedesktop.udisks.drive-eject": YES,
+            "org.freedesktop.udisks.drive-detach": YES,
+            // required for udisks2:
+            "org.freedesktop.udisks2.filesystem-mount": YES,
+            "org.freedesktop.udisks2.encrypted-unlock": YES,
+            "org.freedesktop.udisks2.eject-media": YES,
+            "org.freedesktop.udisks2.power-off-drive": YES,
+            // required for udisks2 if using udiskie from another seat (e.g. systemd):
+            "org.freedesktop.udisks2.filesystem-mount-other-seat": YES,
+            "org.freedesktop.udisks2.filesystem-unmount-others": YES,
+            "org.freedesktop.udisks2.encrypted-unlock-other-seat": YES,
+            "org.freedesktop.udisks2.encrypted-unlock-system": YES,
+            "org.freedesktop.udisks2.eject-media-other-seat": YES,
+            "org.freedesktop.udisks2.power-off-drive-other-seat": YES,
+        };
+        if (subject.isInGroup("storage")) {
+            return permission[action.id];
+        }
+      })
+    '';
 
-  # Configure xserver, window manager and display manager
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    xkbVariant = "";
-    exportConfiguration = true;
-    windowManager.qtile.enable = true;
-    displayManager.lightdm.enable = true;
-
-    libinput = {
+    # sudo config
+    sudo = {
       enable = true;
-      touchpad.tapping = true;
-      touchpad.naturalScrolling = true;
-      touchpad.scrollMethod = "twofinger";
-      touchpad.disableWhileTyping = false;
-      touchpad.clickMethod = "clickfinger";
-      touchpad.accelSpeed = "0";
+      extraRules = [{
+        commands = [
+          {
+            command = "${pkgs.systemd}/bin/systemctl suspend";
+            options = [ "NOPASSWD" ];
+          }
+          {
+            command = "${pkgs.systemd}/bin/reboot";
+            options = [ "NOPASSWD" ];
+          }
+          {
+            command = "${pkgs.systemd}/bin/poweroff";
+            options = [ "NOPASSWD" ];
+          }
+          {
+            command = "${pkgs.systemd}/bin/systemctl hibernate";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+        groups = [ "wheel" ];
+      }];
     };
+
+    # rtkit is optional but recommended
+    rtkit.enable = true;
   };
 
-  # sudo config
-  security.sudo = {
-    enable = true;
-    extraRules = [{
-      commands = [
-        {
-          command = "${pkgs.systemd}/bin/systemctl suspend";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "${pkgs.systemd}/bin/reboot";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "${pkgs.systemd}/bin/poweroff";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "${pkgs.systemd}/bin/systemctl hibernate";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-      groups = [ "wheel" ];
-    }];
-  };
+  services = {
+    # Configure xserver, window manager and display manager
+    xserver = {
+      enable = true;
+      layout = "us";
+      xkbVariant = "";
+      exportConfiguration = true;
+      windowManager.qtile.enable = true;
+      displayManager.lightdm.enable = true;
 
-  # Sound
-  # rtkit is optional but recommended
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+      libinput = {
+        enable = true;
+        touchpad.tapping = true;
+        touchpad.naturalScrolling = true;
+        touchpad.scrollMethod = "twofinger";
+        touchpad.disableWhileTyping = false;
+        touchpad.clickMethod = "clickfinger";
+        touchpad.accelSpeed = "0";
+      };
+
+      # tell Xorg to use the nvidia drivers
+      videoDrivers = [ "nvidia" ];
+    };
+
+    # Sound
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+    };
+
+    # Enable gvfs (PCManFM)
+    gvfs.enable = true;
+    gnome.gnome-keyring.enable = true;
   };
 
   # Enable NTFS support
@@ -151,9 +163,6 @@
 
     ];
   };
-
-  # Enable gvfs (PCManFM)
-  services.gvfs.enable = true;
 
   # Fonts
   fonts.fonts = with pkgs; [ fira-code ];
@@ -177,37 +186,37 @@
     python310Packages.dbus-next
   ];
 
-  # Enable dconf
-  programs.dconf.enable = true;
-  programs.seahorse.enable = true;
-  services.gnome.gnome-keyring.enable = true;
-
-
-  # Enable Docker in rootless mode
-  virtualisation.docker.enable = false;
-  virtualisation.podman = {
-    enable = true;
-    dockerSocket.enable = true;
-    defaultNetwork.settings.dns_enable = true;
+  programs = {
+    # Enable dconf
+    dconf = {
+      enable = true;
+    };
+    seahorse = {
+      enable = true;
+    };
   };
 
-  # Enable unfree nvidia drivers
-  # enable OpenGL
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+  virtualisation = {
+    docker.enable = false;
+    podman = {
+      enable = true;
+      dockerSocket.enable = true;
+      defaultNetwork.settings.dns_enable = true;
+    };
   };
 
-  # tell Xorg to use the nvidia drivers
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  # configure nvidia drivers
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  hardware = {
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+    };
+    nvidia = {
+      modesetting.enable = true;
+      open = false;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
   };
 
   # Create and enable service who dismaount and remound
