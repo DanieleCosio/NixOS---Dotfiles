@@ -13,8 +13,8 @@ with {
 
 {
   imports = [
-    ./pipewire-input-denoise.nix
-    ./secrets.nix
+    ./derivations/pipewire-input-denoise.nix
+    ./derivations/secrets.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -60,6 +60,7 @@ with {
     rnnoise-plugin
     rustdesk
     file
+    xorg.xwininfo
     # SpaceFM
     spaceFM
     lxsession
@@ -71,7 +72,7 @@ with {
     udiskie
     udisks2
     # Custom packages not presents in nixpkgs
-    (callPackage ./hoppscotch.nix { })
+    (callPackage ./derivations/packages/hoppscotch.nix { })
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
