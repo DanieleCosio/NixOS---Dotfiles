@@ -59,8 +59,8 @@ with {
     nixpkgs-fmt
     rnnoise-plugin
     rustdesk
-    go
-    #SpaceFM
+    file
+    # SpaceFM
     spaceFM
     lxsession
     gnome.gnome-keyring
@@ -70,6 +70,8 @@ with {
     gvfs
     udiskie
     udisks2
+    # Custom packages not presents in nixpkgs
+    (callPackage ./hoppscotch.nix { })
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -106,15 +108,11 @@ with {
     };
 
     gtk3.extraConfig = {
-      Settings = ''
-        gtk-application-prefer-dark-theme=1
-      '';
+      gtk-application-prefer-dark-theme = 1;
     };
 
     gtk4.extraConfig = {
-      Settings = ''
-        gtk-application-prefer-dark-theme=1
-      '';
+      gtk-application-prefer-dark-theme = 1;
     };
   };
 
@@ -169,6 +167,48 @@ with {
         "text/plain" = [ "code.desktop" ];
       };
     };
+  };
+
+  #  User services
+  systemd.user.services = {
+    "startup-discord" = {
+      Unit = {
+        Description = "Run Discord at startup";
+        PartOf = "graphical-session.target";
+        After = "graphical-session.target";
+      };
+
+      Service = {
+        Type = "simple";
+        ExecStart = ''
+          ${pkgs.discord}/bin/discord &
+        '';
+      };
+
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
+
+    "startup-rustdesk" = {
+      Unit = {
+        Description = "Run Rustdesk at startup";
+        PartOf = "graphical-session.target";
+        After = "graphical-session.target";
+      };
+
+      Service = {
+        Type = "simple";
+        ExecStart = ''
+          ${pkgs.rustdesk}/bin/rustdesk
+        '';
+      };
+
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
+
   };
 
   # Let Home Manager install and manage itself.
