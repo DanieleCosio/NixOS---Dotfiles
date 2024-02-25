@@ -6,6 +6,7 @@ from libqtile.lazy import lazy
 from libqtile import layout, bar, widget, hook
 
 mod = "mod4"
+home = os.path.expanduser("~")
 
 # Terminal
 terminal = "kitty"
@@ -134,7 +135,7 @@ keys = [
     Key(
         [mod, "control"],
         "c",
-        lazy.spawn("code ~/.config/home-manager"),
+        lazy.spawn(f"code {home}/.config/home-manager"),
         desc="Open QTile configuration",
     ),
     # Utility actions
@@ -150,7 +151,7 @@ keys = [
 groupNames = [
     ("I", {"layout": "max"}),
     ("II", {"layout": "max"}),
-    ("III", {"layout": "max"}),
+    ("III", {"layout": "max", "matches": [Match(wm_class="Discord"), Match(wm_class="Rustdesk")]}),
 ]
 
 # Add groups to layout and groups hotkeys
@@ -316,7 +317,6 @@ auto_minimize = True
 
 @hook.subscribe.startup_once
 def onLoginFinisced():
-    home = os.path.expanduser("~")
     subprocess.call([home + "/.config/qtile/autostart.sh"])
 
 
