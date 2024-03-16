@@ -159,9 +159,8 @@
     isNormalUser = true;
     description = "Daniele Cosio";
     extraGroups = [ "networkmanager" "wheel" "audio" "storage" "podman" ];
-    packages = with pkgs; [
-
-    ];
+    # User packages (right now all defined in home-manager)
+    packages = with pkgs; [ ];
   };
 
   # Fonts
@@ -191,6 +190,7 @@
     dconf = {
       enable = true;
     };
+
     seahorse = {
       enable = true;
     };
@@ -211,6 +211,7 @@
       driSupport = true;
       driSupport32Bit = true;
     };
+
     nvidia = {
       modesetting.enable = true;
       open = false;
@@ -219,8 +220,7 @@
     };
   };
 
-  # Create and enable service who dismaount and remound
-  # r8169 drivers after hibernation wakeup.
+  # Fix r8169 drivers after hibernation wakeup.
   systemd.services.restart-internet-drivers = {
     enable = true;
     description = "Restart r8169 drivers after wake up";
