@@ -61,6 +61,7 @@ with {
     rustdesk
     file
     xorg.xwininfo
+    git-filter-repo
     # SpaceFM
     spaceFM
     lxsession
