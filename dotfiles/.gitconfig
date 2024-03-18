@@ -4,6 +4,8 @@
 	signingkey = 577D02FF8566E7F2
 [credential]
 	helper = store
+[lfs]
+	cachecredentials = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
