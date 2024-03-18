@@ -14,7 +14,6 @@ with {
 {
   imports = [
     ./derivations/pipewire-input-denoise.nix
-    ./derivations/secrets.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -78,7 +77,7 @@ with {
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-  home.file =
+  home.file = lib.mkMerge [
     {
       ".xinitrc".source = dotfiles/.xinitrc;
       ".gitconfig".source = dotfiles/.gitconfig;
@@ -93,7 +92,13 @@ with {
       };
       ".config/gtk-4.0/gtk.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk.css";
       ".config/gtk-4.0/gtk-dark.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk-dark.css";
-    };
+    }
+    (lib.optionalAttrs (builtins.pathExists ./dotfiles/secrets) {
+      ".ssh/id_rsa".source = ./dotfiles/secrets/id_rsa;
+      ".ssh/id_rsa.pub".source = ./dotfiles/secrets/id_rsa.pub;
+    })
+  ];
+
 
   # Set GTK theme and icons
   gtk = {
