@@ -80,6 +80,7 @@ with {
   home.file = lib.mkMerge [
     {
       ".xinitrc".source = dotfiles/.xinitrc;
+      ".xprofile".source = dotfiles/.xprofile;
       ".gitconfig".source = dotfiles/.gitconfig;
       ".XCompose".source = dotfiles/.XCompose;
       ".config/qtile/config.py".source = dotfiles/qtile/config.py;
