@@ -1,4 +1,4 @@
-{ config, pkgs, systemd, lib, ... }:
+{ config, pkgs, systemd, lib, devenv, ... }:
 with {
   theme = {
     package = pkgs.catppuccin-gtk.override {
@@ -61,6 +61,8 @@ with {
     file
     xorg.xwininfo
     git-filter-repo
+    cachix
+    direnv
     # SpaceFM
     spaceFM
     lxsession
@@ -73,6 +75,7 @@ with {
     udisks2
     # Custom packages not presents in nixpkgs
     (callPackage ./derivations/packages/hoppscotch.nix { })
+    devenv.packages."${pkgs.system}".devenv
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -136,6 +139,11 @@ with {
     shellAliases = {
       fcp = "xclip -sel c <";
     };
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 
   # if you don't want to manage your shell through Home Manager.
