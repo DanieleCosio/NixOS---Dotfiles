@@ -132,15 +132,6 @@ with {
     platformTheme = "gtk";
   };
 
-
-  # Set shell
-  programs.fish = {
-    enable = true;
-    shellAliases = {
-      fcp = "xclip -sel c <";
-    };
-  };
-
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;

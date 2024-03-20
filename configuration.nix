@@ -159,6 +159,7 @@
     isNormalUser = true;
     description = "Daniele Cosio";
     extraGroups = [ "networkmanager" "wheel" "audio" "storage" "podman" ];
+    shell = pkgs.fish;
     # User packages (right now all defined in home-manager)
     packages = with pkgs; [ ];
   };
@@ -193,6 +194,14 @@
 
     seahorse = {
       enable = true;
+    };
+
+    # Set shell
+    fish = {
+      enable = true;
+      shellAliases = {
+        fcp = "xclip -sel c <";
+      };
     };
   };
 
