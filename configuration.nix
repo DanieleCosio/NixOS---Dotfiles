@@ -239,5 +239,18 @@
     path = [ "/nix/store" ];
   };
 
+  # Binary cache tests
+  nix.settings.substituters = [
+    https://cache.garnix.io
+    https://devenv.cachix.org
+    https://cachix.cachix.org
+  ];
+
+  nix.settings.trusted-public-keys = [
+    cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=
+    devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
+    cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
+  ];
+
   system.stateVersion = "23.05"; # Did you read the comment
 }

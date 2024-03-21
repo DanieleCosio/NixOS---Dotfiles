@@ -63,6 +63,8 @@ with {
     git-filter-repo
     cachix
     direnv
+    beekeeper-studio
+    gpick
     # SpaceFM
     spaceFM
     lxsession
