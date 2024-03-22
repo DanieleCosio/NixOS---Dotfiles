@@ -199,9 +199,6 @@
     # Set shell
     fish = {
       enable = true;
-      shellAliases = {
-        fcp = "xclip -sel c <";
-      };
     };
   };
 

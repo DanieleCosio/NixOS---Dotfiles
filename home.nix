@@ -61,10 +61,12 @@ with {
     file
     xorg.xwininfo
     git-filter-repo
-    cachix
     direnv
     beekeeper-studio
     gpick
+    vlc
+    flameshot
+    coreutils
     # SpaceFM
     spaceFM
     lxsession
@@ -137,6 +139,17 @@ with {
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+
+  programs.fish = {
+    enable = true;
+    functions = {
+      fm = ''
+        function fm
+          nohup spacefm ./ &
+        end
+      '';
+    };
   };
 
   # if you don't want to manage your shell through Home Manager.
