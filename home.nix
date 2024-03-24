@@ -7,7 +7,7 @@ with {
       variant = "macchiato";
     };
 
-    name = "Catppuccin-Macchiato-Standard-Pink-dark";
+    name = "Catppuccin-Macchiato-Standard-Pink-Dark";
   };
 };
 
@@ -67,6 +67,7 @@ with {
     vlc
     flameshot
     coreutils
+    catppuccin
     # SpaceFM
     spaceFM
     lxsession
@@ -94,10 +95,7 @@ with {
       ".config/qtile/autostart.sh".source = dotfiles/qtile/autostart.sh;
       ".config/picom/picom.conf".source = dotfiles/picom/picom.conf;
       ".config/kitty/kitty.conf".source = dotfiles/kitty/kitty.conf;
-      ".config/gtk-4.0/assets" = {
-        recursive = true;
-        source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/assets";
-      };
+      ".config/gtk-4.0/assets".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/assets";
       ".config/gtk-4.0/gtk.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk.css";
       ".config/gtk-4.0/gtk-dark.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk-dark.css";
     }
