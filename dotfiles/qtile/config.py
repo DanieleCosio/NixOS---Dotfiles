@@ -50,47 +50,55 @@ keys = [
         desc="Move focused window to group III",
     ),
     # Columns layout
-    Key([mod], "j", lazy.layout.down(), desc="Move down in layout"),
-    Key([mod], "k", lazy.layout.up(), desc="Move up in layout"),
-    Key([mod], "h", lazy.layout.left(), desc="Move left in layout"),
-    Key([mod], "l", lazy.layout.right(), desc="Move right in layout"),
+    Key([mod], "Down", lazy.layout.down(), desc="Move down in layout"),
+    Key([mod], "Up", lazy.layout.up(), desc="Move up in layout"),
+    Key([mod], "Left", lazy.layout.left(), desc="Move left in layout"),
+    Key([mod], "Right", lazy.layout.right(), desc="Move right in layout"),
     Key(
         [mod, "shift"],
-        "j",
+        "Down",
         lazy.layout.shuffle_down(),
         desc="Move window down in the layout stack",
     ),
     Key(
         [mod, "shift"],
-        "k",
+        "Up",
         lazy.layout.shuffle_up(),
         desc="Move window up in the layout stack",
     ),
     Key(
         [mod, "shift"],
-        "h",
+        "Left",
         lazy.layout.shuffle_left(),
         desc="Move window to the left in the layout stack",
     ),
     Key(
         [mod, "shift"],
-        "l",
+        "Right",
         lazy.layout.shuffle_right(),
         desc="Move window to the right in the layout stack",
     ),
-    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
     Key(
-        [mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"
+        [mod, "control"],
+        "Left",
+        lazy.layout.grow_left(),
+        desc="Grow window to the left",
+    ),
+    Key(
+        [mod, "control"],
+        "Right",
+        lazy.layout.grow_right(),
+        desc="Grow window to the right",
     ),
     Key(
         [mod, "shift", "control"],
-        "h",
+        "Left",
         lazy.layout.swap_column_left(),
         desc="Swap column to left",
     ),
     Key(
         [mod, "shift", "control"],
-        "l",
+        "Right",
         lazy.layout.swap_column_right(),
         desc="Swap column to the right",
     ),
@@ -101,8 +109,8 @@ keys = [
         desc="Split to window in the same stack",
     ),
     # Tree tabs layout
-    Key([mod, "control"], "k", lazy.layout.section_up(), desc="TreeTab Down"),
-    Key([mod, "control"], "j", lazy.layout.section_down(), desc="TreeTab Up"),
+    Key([mod, "control"], "Up", lazy.layout.section_up(), desc="TreeTab Down"),
+    Key([mod, "control"], "Down", lazy.layout.section_down(), desc="TreeTab Up"),
     # Window controls
     Key(
         [mod, "shift"],
@@ -151,7 +159,13 @@ keys = [
 groupNames = [
     ("I", {"layout": "max"}),
     ("II", {"layout": "max"}),
-    ("III", {"layout": "max", "matches": [Match(wm_class="Discord"), Match(wm_class="Rustdesk")]}),
+    (
+        "III",
+        {
+            "layout": "max",
+            "matches": [Match(wm_class="Discord"), Match(wm_class="Rustdesk")],
+        },
+    ),
 ]
 
 # Add groups to layout and groups hotkeys
