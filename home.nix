@@ -78,6 +78,7 @@ with {
     gvfs
     udiskie
     udisks2
+    curlftpfs
     # Custom packages not presents in nixpkgs
     (callPackage ./derivations/packages/hoppscotch.nix { })
     devenv.packages."${pkgs.system}".devenv
@@ -95,6 +96,7 @@ with {
       ".config/qtile/autostart.sh".source = dotfiles/qtile/autostart.sh;
       ".config/picom/picom.conf".source = dotfiles/picom/picom.conf;
       ".config/kitty/kitty.conf".source = dotfiles/kitty/kitty.conf;
+      ".config/spacefm/scripts/hand_net_+ftp/hand-protocolo-mount.sh".source = dotfiles/spacefm/scripts/hand_net_+ftp/hand-protocolo-mount.sh;
       ".config/gtk-4.0/assets".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/assets";
       ".config/gtk-4.0/gtk.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk.css";
       ".config/gtk-4.0/gtk-dark.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk-dark.css";
@@ -144,7 +146,7 @@ with {
     functions = {
       fm = ''
         function fm
-          nohup spacefm ./ &
+          nohup spacefm ./ >/dev/null 2 > &1
         end
       '';
     };

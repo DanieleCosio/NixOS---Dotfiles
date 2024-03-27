@@ -196,6 +196,9 @@
       enable = true;
     };
 
+    # CurlFTPFS
+    fuse.userAllowOther = true;
+
     # Set shell
     fish = {
       enable = true;
