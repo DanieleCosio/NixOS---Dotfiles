@@ -1,5 +1,5 @@
 """
-Do all needed action for nixos config installation
+Do all needed action for NixOS config installation
 """
 
 import argparse
@@ -18,6 +18,9 @@ from base64 import b64encode
 URL = "http://secrets.homeserver.lc/secrets.zip"
 FULL_CONFIG_PATH = "/home/shamorn/.config/home-manager"
 GLOBAL_NIX_CONFIG_PATH = "/etc/nixos/configuration.nix"
+# global config imports like overlays, etc
+GLOBAL_NIX_VERISIONED_CONFIG_PATH = "./derivations/global"
+GLOBAL_NIX_CONFIG_BACKUP_PATH = "./global-bk"
 
 
 @dataclass
@@ -37,11 +40,37 @@ class TerminalColors:
     UNDERLINE = "\033[4m"
 
 
+@dataclass
+class Subcommands:
+    """
+    Subcommands
+    """
+
+    UPDATE = "update"
+    BACKUP = "backup"
+    RESTORE = "restore"
+
+
 def get_command_line_args() -> argparse.Namespace:
     """
     Get command line arguments using argparse
     """
     parser = argparse.ArgumentParser()
+    subparser = parser.add_subparsers(
+        dest="subcommand",
+        title="Actions",
+        help="update, backup, restore NixOS config.",
+    )
+    subparser.required = True
+    update_subparser = subparser.add_parser(
+        Subcommands.UPDATE, help="Update NixOS config."
+    )
+    backup_subparser = subparser.add_parser(
+        Subcommands.BACKUP, help="Backup NixOS config."
+    )
+    restore_subparser = subparser.add_parser(
+        Subcommands.RESTORE, help="Restore NixOS config."
+    )
 
     # Arguments
     parser.add_argument(
@@ -61,11 +90,12 @@ def get_command_line_args() -> argparse.Namespace:
         help="Config path (default: ~/.config/home-manager).",
         required=False,
     )
-    parser.add_argument(
-        "-u",
-        "--update-config",
+
+    update_subparser.add_argument(
+        "-s",
+        "--secrets",
         action="store_true",
-        help="Only validate and update nix and home-manager config.",
+        help="Download secrets package.",
         required=False,
     )
 
@@ -73,7 +103,7 @@ def get_command_line_args() -> argparse.Namespace:
 
 
 def download_secrets_package(
-    username: str, password: str, zip_password: str, url: str = None
+    username: str, password: str, zip_password: str, url: str | None = None
 ) -> None:
     """
     Download secrets package zip using basic auth
@@ -121,6 +151,51 @@ def download_secrets_package(
             sys.exit(1)
 
 
+def backup_current_config() -> None:
+    """
+    Backup current NixOS configuration
+    """
+    config_backup_path = pathlib.Path(GLOBAL_NIX_CONFIG_BACKUP_PATH)
+    backup_already_exists = config_backup_path.exists()
+    backup_new_path = f"{config_backup_path}--deleting"
+    if backup_already_exists:
+        os.rename(config_backup_path, backup_new_path)
+
+    config_path = pathlib.Path(GLOBAL_NIX_CONFIG_PATH).parents[0]
+    shutil.copytree(config_path, config_backup_path)
+
+    if backup_already_exists:
+        shutil.rmtree(backup_new_path)
+
+
+def restore_backup_config() -> None:
+    """
+    Restore backup NixOS configuration
+    """
+    config_backup_path = pathlib.Path(GLOBAL_NIX_CONFIG_BACKUP_PATH)
+    config_path = pathlib.Path(GLOBAL_NIX_CONFIG_PATH).parents[0]
+    for file in config_path.iterdir():
+        file.unlink()
+
+    for file in config_backup_path.iterdir():
+        shutil.copy2(file, config_path)
+
+
+def update_nixos_config() -> None:
+    """
+    Update NixOS configuration
+    """
+    config_path = pathlib.Path(GLOBAL_NIX_CONFIG_PATH).parents[0]
+    for file in config_path.iterdir():
+        file.unlink()
+
+    shutil.copy2("./configuration.nix", GLOBAL_NIX_CONFIG_PATH)
+
+    versioned_config_path = pathlib.Path(GLOBAL_NIX_VERISIONED_CONFIG_PATH)
+    for file in versioned_config_path.iterdir():
+        shutil.copy2(file, config_path)
+
+
 if __name__ == "__main__":
     # Check if is script is executed as root
     if os.geteuid() != 0:
@@ -143,66 +218,40 @@ if __name__ == "__main__":
         )
         sys.exit(1)
 
-    if not args.update_config:
-        # Download and unzip secrets package
-        basicAuthUsername = input("Basic auth username: ")
-        basicAuthPassword = getpass("Basic auth password: ")
-        zipPassword = getpass("Secrets packages passoword: ")
+    if args.subcommand == Subcommands.BACKUP:
+        backup_current_config()
+    elif args.subcommand == Subcommands.RESTORE:
+        restore_backup_config()
+    elif args.subcommand == Subcommands.UPDATE:
+        if args.secrets:
+            # Download and unzip secrets package
+            basicAuthUsername = input("Basic auth username: ")
+            basicAuthPassword = getpass("Basic auth password: ")
+            zipPassword = getpass("Secrets packages passoword: ")
 
-        download_secrets_package(
-            basicAuthUsername, basicAuthPassword, zipPassword, args.link
-        )
+            download_secrets_package(
+                basicAuthUsername, basicAuthPassword, zipPassword, args.link
+            )
 
-    # Copy nixos global config
-    if pathlib.Path("/etc/nixos/configuration.nix").exists():
-        shutil.copy2("/etc/nixos/configuration.nix", "./configuration-bk.nix")
-        os.remove("/etc/nixos/configuration.nix")
-    shutil.copy2("./configuration.nix", GLOBAL_NIX_CONFIG_PATH)
+        # Copy NixOS global config
+        backup_current_config()
+        update_nixos_config()
 
-    # Test and set global nixos config
-    try:
-        subprocess.run("nixos-rebuild  build", shell=True, check=True)
-    except subprocess.CalledProcessError as error:
-        print(
-            f"""
-                {TerminalColors.FAIL}Error during NixOS global 
-                configuration validation.{TerminalColors.ENDC}\n
-            """
-        )
-        print(f"{TerminalColors.FAIL}{error}{TerminalColors.ENDC}")
+        # Test and set global NixOS config
+        try:
+            subprocess.run("nixos-rebuild  build", shell=True, check=True)
+        except subprocess.CalledProcessError as error:
+            print(
+                f"""
+                    {TerminalColors.FAIL}Error during NixOS global 
+                    configuration validation.{TerminalColors.ENDC}\n
+                """
+            )
+            print(f"{TerminalColors.FAIL}{error}{TerminalColors.ENDC}")
 
-        # Restore backup config if exists
-        if pathlib.Path("./configuration-bk.nix").exists():
-            shutil.copy2("./configuration-bk.nix", GLOBAL_NIX_CONFIG_PATH)
-            os.remove("./configuration-bk.nix")
+            # Restore backup config if exists
+            if pathlib.Path("./configuration-bk.nix").exists():
+                shutil.copy2("./configuration-bk.nix", GLOBAL_NIX_CONFIG_PATH)
+                os.remove("./configuration-bk.nix")
 
-        sys.exit(1)
-
-    # Run Home Manger config validaton and switch
-    # try:
-    #     subprocess.run(
-    #         "home-manager build",
-    #         shell=True,
-    #         check=True,
-    #     )
-    # except subprocess.CalledProcessError as error:
-    #     print(
-    #         f"""
-    #             {TerminalColors.FAIL}Error during NixOS global
-    #             configuration validation.{TerminalColors.ENDC}\n
-    #         """
-    #     )
-    #     print(f"{TerminalColors.FAIL}{error}{TerminalColors.ENDC}")
-    #     sys.exit(1)
-
-    # try:
-    #     subprocess.run("home-manager switch", shell=True, check=True)
-    # except subprocess.CalledProcessError as error:
-    #     print(
-    #         f"""
-    #             {TerminalColors.FAIL}Error during NixOS global
-    #             configuration validation.{TerminalColors.ENDC}\n
-    #         """
-    #     )
-    #     print(f"{TerminalColors.FAIL}{error}{TerminalColors.ENDC}")
-    #     sys.exit(1)
+            sys.exit(1)
