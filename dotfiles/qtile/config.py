@@ -26,7 +26,7 @@ keys = [
     Key([mod], "Tab", lazy.next_layout(), desc="Next layout"),
     Key([mod, "shift"], "q", lazy.window.kill(), desc="Kill active window"),
     Key([mod, "shift"], "r", lazy.restart(), desc="Restart qtile"),
-    Key([mod, "shift"], "s", lazy.shutdown(), desc="Log out from qtile"),
+    Key([mod, "shift"], "l", lazy.shutdown(), desc="Log out from qtile"),
     # Groups
     Key([mod], "z", lazy.group["I"].toscreen(), desc="Move to group I"),
     Key([mod], "x", lazy.group["II"].toscreen(), desc="Move to group II"),
@@ -260,6 +260,12 @@ dateTime = widget.Clock(
     padding=5,
 )
 
+notify = widget.Notify(
+    foreground=colors["lightViolet"],
+    background=colors["lightGrey"],
+    padding=5,
+)
+
 systray = widget.Systray()
 
 screens = [
@@ -273,6 +279,7 @@ screens = [
                 network,
                 dateTime,
                 systray,
+                notify,
             ],
             opacity=1.0,
             size=20,
