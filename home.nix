@@ -68,6 +68,9 @@ with {
     flameshot
     coreutils
     catppuccin
+    whatsapp-for-linux
+    simplescreenrecorder
+    dunst
     # SpaceFM
     spaceFM
     lxsession
@@ -96,7 +99,7 @@ with {
       ".config/qtile/autostart.sh".source = dotfiles/qtile/autostart.sh;
       ".config/picom/picom.conf".source = dotfiles/picom/picom.conf;
       ".config/kitty/kitty.conf".source = dotfiles/kitty/kitty.conf;
-      ".config/spacefm/scripts/hand_net_+ftp/hand-protocolo-mount.sh".source = dotfiles/spacefm/scripts/hand_net_+ftp/hand-protocolo-mount.sh;
+      ".config/spacefm/scripts/hand_net_+ftp/hand-protocol-mount.sh".source = dotfiles/spacefm/scripts/hand_net_+ftp/hand-protocol-mount.sh;
       ".config/gtk-4.0/assets".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/assets";
       ".config/gtk-4.0/gtk.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk.css";
       ".config/gtk-4.0/gtk-dark.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk-dark.css";
@@ -192,6 +195,8 @@ with {
   };
 
   #  User services
+  services.dunst.enable = true;
+
   systemd.user.services = {
     "startup-discord" = {
       Unit = {
@@ -231,6 +236,43 @@ with {
       };
     };
 
+    "startup-whatsapp-for-linux" = {
+      Unit = {
+        Description = "Run WhatsApp for Linux at startup";
+        PartOf = "graphical-session.target";
+        After = "graphical-session.target";
+      };
+
+      Service = {
+        Type = "simple";
+        ExecStart = ''
+          ${pkgs.whatsapp-for-linux}/bin/whatsapp-for-linux
+        '';
+      };
+
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
+
+    "startup-flameshot" = {
+      Unit = {
+        Description = "Run Flameshot at startup";
+        PartOf = "graphical-session.target";
+        After = "graphical-session.target";
+      };
+
+      Service = {
+        Type = "simple";
+        ExecStart = ''
+          ${pkgs.flameshot}/bin/flameshot
+        '';
+      };
+
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
   };
 
   # Let Home Manager install and manage itself.
