@@ -171,13 +171,32 @@ groupNames = [
 # Add groups to layout and groups hotkeys
 groups = [Group(name, **kwargs) for name, kwargs in groupNames]
 
+# Colors
+colors = {
+    "darkGrey": "#1c1c1c",
+    "lightGrey": "#666666",
+    "orange": "#ff9f00",
+    "lightViolet": "#be67e1",
+    "violet": "#833c9f",
+    "red": "#ff005b",
+    "blue": "#048ac7",
+    "lightBlue": "#63e7f0",
+    "green": "#73bd78",
+}
+
 # List with all layouts used
 layouts = [
     layout.Columns(
-        num_columns=2, border_focus="73bd78", border_focus_stack="73bd78", split=False
+        num_columns=2,
+        border_focus=colors["lightBlue"],
+        border_focus_stack=colors["lightBlue"],
+        split=False,
     ),
     layout.Columns(
-        num_columns=3, border_focus="73bd78", border_focus_stack="73bd78", split=False
+        num_columns=3,
+        border_focus=colors["lightBlue"],
+        border_focus_stack=colors["lightBlue"],
+        split=False,
     ),
     layout.Max(),
     layout.TreeTab(
@@ -194,18 +213,6 @@ layouts = [
 ]
 
 # Widgets
-colors = {
-    "darkGrey": "#1c1c1c",
-    "lightGrey": "#666666",
-    "orange": "#ff9f00",
-    "lightViolet": "#be67e1",
-    "violet": "#833c9f",
-    "red": "#ff005b",
-    "blue": "#048ac7",
-    "lightBlue": "#63e7f0",
-    "green": "#73bd78",
-}
-
 groupbox = widget.GroupBox(
     fontsize=9,
     active=colors["orange"],
@@ -239,8 +246,22 @@ pomodoro = widget.Pomodoro(
     color_inactive=colors["darkGrey"],
 )
 
-memory = widget.Memory(
+cpu = widget.CPU(
     foreground=colors["darkGrey"],
+    background=colors["green"],
+    mouse_callbacks={"Button1": lambda: qtile.cmd_spawn(terminal + " htop")},
+    padding=5,
+)
+
+cpuThermal = widget.ThermalSensor(
+    foreground=colors["darkGrey"],
+    background=colors["green"],
+    padding=5,
+    tag_sensor="Tctl",
+)
+
+memory = widget.Memory(
+    foreground=colors["lightBlue"],
     background=colors["red"],
     mouse_callbacks={"Button1": lambda: qtile.cmd_spawn(terminal + " htop")},
     padding=5,
@@ -274,7 +295,8 @@ screens = [
             widgets=[
                 groupbox,
                 programsBar,
-                pomodoro,
+                cpu,
+                cpuThermal,
                 memory,
                 network,
                 dateTime,
