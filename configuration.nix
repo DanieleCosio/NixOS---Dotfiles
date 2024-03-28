@@ -165,7 +165,7 @@
   };
 
   # Fonts
-  fonts.fonts = with pkgs; [ fira-code ];
+  fonts.packages = with pkgs; [ fira-code ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -251,6 +251,8 @@
     devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
     cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
   ];
+
+  nix.settings.trusted-users = [ "root" "shamorn" ];
 
   system.stateVersion = "23.05"; # Did you read the comment
 }
