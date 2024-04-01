@@ -110,6 +110,8 @@
 
     # rtkit is optional but recommended
     rtkit.enable = true;
+
+    pam.services.qtile.enableGnomeKeyring = true;
   };
 
   services = {
