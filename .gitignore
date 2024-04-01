@@ -4,3 +4,4 @@ __pycache__
 secrets/
 configuration-bk.nix
 global-bk/
+derivations/global/hardware-configuration.nix
