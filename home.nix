@@ -139,11 +139,13 @@ with {
     platformTheme = "gtk";
   };
 
+  # Direnv
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
   };
 
+  # Fish Shell
   programs.fish = {
     enable = true;
     functions = {
@@ -152,6 +154,19 @@ with {
           nohup spacefm ./ >/dev/null 2 > &1
         end
       '';
+    };
+  };
+
+  # SSH
+  programs.ssh = {
+    enable = true;
+    compression = true;
+    forwardAgent = true;
+    extraConfig = "AddKeysToAgent yes";
+    matchBlocks = {
+      "home-server" = {
+        hostname = "192.168.1.236";
+      };
     };
   };
 
