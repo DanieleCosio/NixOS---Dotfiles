@@ -149,6 +149,12 @@
     # Enable gvfs (PCManFM)
     gvfs.enable = true;
     gnome.gnome-keyring.enable = true;
+
+    # Enable ssh server
+    openssh = {
+      enable = true;
+      settings.PermitRootLogin = "no";
+    };
   };
 
   # Enable NTFS support
