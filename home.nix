@@ -71,6 +71,7 @@ with {
     whatsapp-for-linux
     simplescreenrecorder
     dunst
+    fd
     # SpaceFM
     spaceFM
     lxsession
@@ -151,7 +152,12 @@ with {
     functions = {
       fm = ''
         function fm
-          nohup spacefm ./ >/dev/null 2 > &1
+          nohup spacefm ./ > /dev/null 2>&1 &
+        end
+      '';
+      hoppscotch = ''
+        function hoppscotch
+          nohup sh -c 'WEBKIT_DISABLE_COMPOSITING_MODE=1 hoppscotch-app %U' > /dev/null 2 >&1 &
         end
       '';
     };
