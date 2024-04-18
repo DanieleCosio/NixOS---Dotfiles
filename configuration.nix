@@ -157,6 +157,12 @@
       enable = true;
       settings.PermitRootLogin = "no";
     };
+
+    # Udev
+    udev = {
+      enable = true;
+      packages = [ pkgs.android-udev-rules ];
+    };
   };
 
   # Enable NTFS support
@@ -166,7 +172,15 @@
   users.users.shamorn = {
     isNormalUser = true;
     description = "Daniele Cosio";
-    extraGroups = [ "networkmanager" "wheel" "audio" "storage" "podman" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "audio"
+      "storage"
+      "podman"
+      "kvm"
+      "adbusers"
+    ];
     shell = pkgs.fish;
     # User packages (right now all defined in home-manager)
     packages = with pkgs; [ ];
@@ -196,21 +210,12 @@
 
   programs = {
     # Enable dconf
-    dconf = {
-      enable = true;
-    };
-
-    seahorse = {
-      enable = true;
-    };
-
+    dconf.enable = true;
+    seahorse.enable = true;
     # CurlFTPFS
     fuse.userAllowOther = true;
-
     # Set shell
-    fish = {
-      enable = true;
-    };
+    fish.enable = true;
   };
 
   virtualisation = {

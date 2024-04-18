@@ -72,6 +72,10 @@ with {
     simplescreenrecorder
     dunst
     fd
+    imagemagick
+    android-studio
+    lsof
+    nodejs_18
     # SpaceFM
     spaceFM
     lxsession
@@ -180,6 +184,7 @@ with {
   home.sessionVariables = {
     EDITOR = "code";
     BROWSER = "google-chrome-stable";
+    ANDROID_HOME = "/home/shamorn/Android/Sdk";
   };
 
   # Keyring config
