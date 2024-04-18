@@ -76,6 +76,7 @@ with {
     android-studio
     lsof
     nodejs_18
+    pamixer
     # SpaceFM
     spaceFM
     lxsession

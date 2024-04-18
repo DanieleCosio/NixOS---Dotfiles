@@ -131,6 +131,10 @@ keys = [
         lazy.spawn("systemctl hibernate", shell=True),
         desc="Hibernate system.",
     ),
+    # Volume control
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pamixer -d 5"), desc="Lower Volume by 5%"),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pamixer -i 5"), desc="Raise Volume by 5%"),
+    Key([], "XF86AudioMute", lazy.spawn("pamixer -t"), desc="Mute/Unmute Volume"),
     # Quick launch apps
     Key([mod], "m", lazy.spawn(file_manager), desc="Launch file manager"),
     Key(
