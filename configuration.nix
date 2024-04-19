@@ -162,6 +162,8 @@
     udev = {
       enable = true;
       packages = [ pkgs.android-udev-rules ];
+      # Needed for via keayboard configurator
+      extraRules = ''KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"'';
     };
   };
 

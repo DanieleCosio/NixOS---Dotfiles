@@ -90,6 +90,7 @@ with {
     curlftpfs
     # Custom packages not presents in nixpkgs
     (callPackage ./derivations/packages/hoppscotch.nix { })
+    (callPackage ./derivations/packages/via.nix { })
     devenv.packages."${pkgs.system}".devenv
   ];
 
