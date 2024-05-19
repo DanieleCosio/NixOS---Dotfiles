@@ -234,6 +234,7 @@
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
+      extraPackages = [ pkgs.libvdpau-va-gl ]; #NVIDIA doesn't support libvdpau, so this package will redirect VDPAU calls to LIBVA.
     };
 
     nvidia = {
@@ -243,6 +244,10 @@
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
+
+  environment.variables.VDPAU_DRIVER = "va_gl";
+  environment.variables.LIBVA_DRIVER_NAME = "nvidia";
+
 
   # Fix r8169 drivers after hibernation wakeup.
   systemd.services.restart-internet-drivers = {
