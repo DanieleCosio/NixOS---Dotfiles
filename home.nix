@@ -1,4 +1,4 @@
-{ config, pkgs, systemd, lib, devenv, ... }:
+{ config, pkgs, unstablePkgs, systemd, lib, devenv, ... }:
 with {
   theme = {
     package = pkgs.catppuccin-gtk.override {

@@ -4,6 +4,7 @@
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     spicetify-nix.url = "github:the-argus/spicetify-nix";
     devenv.url = "github:cachix/devenv";
     home-manager = {
@@ -12,15 +13,16 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, spicetify-nix, devenv, ... }:
+  outputs = { nixpkgs, unstable, home-manager, spicetify-nix, devenv, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      unstablePkgs = import unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
     in
     {
       homeConfigurations."shamorn" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit spicetify-nix devenv; };
+        extraSpecialArgs = { inherit spicetify-nix devenv unstablePkgs; };
 
         # Specify your home configuration modules here, for example,
         # the path to your home.nix.
