@@ -73,10 +73,15 @@ with {
     dunst
     fd
     imagemagick
-    android-studio
+    unstablePkgs.androidStudioPackages.beta
     lsof
     nodejs_18
     pamixer
+    audacity
+    xf86_input_wacom
+    libwacom
+    wacomtablet
+    unstablePkgs.redisinsight
     # SpaceFM
     spaceFM
     lxsession
