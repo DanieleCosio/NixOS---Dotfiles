@@ -82,6 +82,12 @@ with {
     libwacom
     wacomtablet
     unstablePkgs.redisinsight
+    insomnia
+    localsend
+    streamlink
+    streamlink-twitch-gui-bin
+    mpv-unwrapped
+    gedit
     # SpaceFM
     spaceFM
     lxsession
@@ -117,7 +123,8 @@ with {
       ".config/gtk-4.0/gtk-dark.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk-dark.css";
     }
     (lib.optionalAttrs (builtins.pathExists ./dotfiles/secrets) {
-      ".ssh/id_rsa".source = ./dotfiles/secrets/id_rsa;
+      ".ssh/id
+      _rsa".source = ./dotfiles/secrets/id_rsa;
       ".ssh/id_rsa.pub".source = ./dotfiles/secrets/id_rsa.pub;
     })
   ];

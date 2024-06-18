@@ -26,7 +26,7 @@ let
     categories = [ "Development" ];
     desktopName = "Hoppscotch";
     exec =
-      "WEBKIT_DISABLE_COMPOSITING_MODE=1 hoppscotch-app %U"; # https://github.com/tauri-apps/tauri/issues/4315
+      "WEBKIT_DISABLE_DMABUF_RENDERER=1 hoppscotch-app %U"; # https://github.com/tauri-apps/tauri/issues/4315
     icon = name;
     inherit name;
   };
