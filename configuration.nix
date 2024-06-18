@@ -118,24 +118,27 @@
     # Configure xserver, window manager and display manager
     xserver = {
       enable = true;
-      layout = "us";
-      xkbVariant = "";
+      xkb = {
+        layout = "us";
+        variant = "";
+      };
+
       exportConfiguration = true;
       windowManager.qtile.enable = true;
       displayManager.lightdm.enable = true;
 
-      libinput = {
-        enable = true;
-        touchpad.tapping = true;
-        touchpad.naturalScrolling = true;
-        touchpad.scrollMethod = "twofinger";
-        touchpad.disableWhileTyping = false;
-        touchpad.clickMethod = "clickfinger";
-        touchpad.accelSpeed = "0";
-      };
-
       # tell Xorg to use the nvidia drivers
       videoDrivers = [ "nvidia" ];
+    };
+
+    libinput = {
+      enable = true;
+      touchpad.tapping = true;
+      touchpad.naturalScrolling = true;
+      touchpad.scrollMethod = "twofinger";
+      touchpad.disableWhileTyping = false;
+      touchpad.clickMethod = "clickfinger";
+      touchpad.accelSpeed = "0";
     };
 
     # Sound

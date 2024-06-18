@@ -119,12 +119,11 @@ with {
       ".config/kitty/kitty.conf".source = dotfiles/kitty/kitty.conf;
       ".config/spacefm/scripts/hand_net_+ftp/hand-protocol-mount.sh".source = dotfiles/spacefm/scripts/hand_net_+ftp/hand-protocol-mount.sh;
       ".config/gtk-4.0/assets".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/assets";
-      ".config/gtk-4.0/gtk.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk.css";
+      /* ".config/gtk-4.0/gtk.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk.css"; */
       ".config/gtk-4.0/gtk-dark.css".source = "${theme.package}/share/themes/${theme.name}/gtk-4.0/gtk-dark.css";
     }
     (lib.optionalAttrs (builtins.pathExists ./dotfiles/secrets) {
-      ".ssh/id
-      _rsa".source = ./dotfiles/secrets/id_rsa;
+      ".ssh/id_rsa".source = ./dotfiles/secrets/id_rsa;
       ".ssh/id_rsa.pub".source = ./dotfiles/secrets/id_rsa.pub;
     })
   ];
@@ -155,7 +154,7 @@ with {
 
   qt = {
     enable = true;
-    platformTheme = "gtk";
+    platformTheme.name = "gtk";
   };
 
   # Direnv
